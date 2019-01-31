@@ -1,0 +1,58 @@
+.card {
+  position: relative;
+  transition: all .2s;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around; // IT'S NOT NECESSARY BUT IT'S BETTER
+  
+    padding: 1.3rem;
+    height: 25rem;
+    border-radius: 2px;
+    box-shadow: 0 .2rem 2rem rgba(#000, .15);
+    text-align: center;
+  }
+
+  &__img {
+    width: 5rem;
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
+
+  &__name {
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    font-weight: bold;
+    margin-bottom: .5rem;
+  }
+
+  &__tagline {
+    font-size: 1.1rem;
+    color: #C6BCB6;
+    font-weight: 500;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 3rem .1rem rgba(#000, .25);
+  }
+}
+
+.favourite {
+  font-size: 1.3rem;
+  position: absolute;
+  top: .8rem;
+  right: 1.1rem;
+  cursor: pointer;
+  transition: all .2s;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &__ok {
+    color: var(--color-primary);
+  }
+}

@@ -1,0 +1,41 @@
+.main-container {
+  padding: 6rem;
+  max-width: 850px;
+  margin: 0 auto;
+
+  @media (max-width: 900px){
+    & {
+      padding: 2rem;
+      max-width: 500px;
+    }
+  }
+    
+  @media (max-width: 500px){
+    & {      
+      padding: 2rem;
+      max-width: 100%;
+    }
+  }
+}
+
+.grid {
+  
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  grid-gap: 2rem;
+  justify-items: stretch;
+
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 22rem)); 
+  //TODO RETIRAR O 1FR E TESTAR COM COLUNAS FIXAS repeat(auto-fit, 100px);
+  
+  &__item {
+    
+  }
+
+  @media only screen and (max-width: 500px){
+    & {
+      justify-items: stretch;
+    }
+  }
+}

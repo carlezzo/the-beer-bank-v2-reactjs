@@ -1,0 +1,25 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  background-color: var(--color-primary);
+  
+  &__item {
+    list-style: none;
+
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+  }
+
+  &__link:link,
+  &__link:visited {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+}
