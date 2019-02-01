@@ -1,61 +1,85 @@
 import React, { Component } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
 import { getFavourites } from '../utils/utils';
-import App from '../App';
+import Main from '../components/Main';
 
 export default class Favourites extends Component {
   constructor(props) {
     super(props);
+    
+    this.perPage = 20;
 
     this.state = {
-      beers: []
+      beers: [],
+      page: 0,
+      loading: false,
+      hasMore: true,
+      noDataFound: false
     }
   }
 
-  async componentDidMount() {
-    const { beers } = this.state;
+  componentDidMount() {
+    this.handleFetchFavorites();
+  }
+
+  handleFetchFavorites = async (searchQuery, reload) => {
+    const { beers, loading, hasMore, page } = this.state;
+
+    if (reload) {
+      this.setState({page: 0, beers: [], hasMore: true});
+    }
+
+    if (loading || !hasMore) {
+      return;
+    }
 
     const favourites = getFavourites();
 
     if (!favourites) {
+      this.setState({ hasMore: false })
       return;
     }
 
-    let ids = favourites.join().replace(/,/g, '|');
+    this.setState({ loading: true })
 
-    const response = await fetch(`https://api.punkapi.com/v2/beers?ids=${ids}`)
+    const nextPage = page + 1;
+    const filterPage = `&page=${nextPage}`
+    const ids = `&ids=${favourites.join().replace(/,/g, '|')}`;
+    const filterName = searchQuery ? `&beer_name=${searchQuery}` : '';
+    const perPage = `per_page=${20}`;
+
+    const response = await fetch(`https://api.punkapi.com/v2/beers?${perPage}${filterPage}${ids}${filterName}`)
     const data = await response.json();
+
     const favouritesMerged = [...beers, ...data];
 
-    console.log(favouritesMerged)
-    // this.setState({ favourites: favouritesMerged, loading: false, hasMore: !!data.length });
+    this.setState({ 
+      beers: favouritesMerged, 
+      loading: false,
+      page: nextPage,
+      hasMore: data.length === this.perPage,
+      noDataFound: !data.length && !favouritesMerged.length
+    });
+  }
+
+  handleRemoveFavourite = (id) => {
+    const { beers } = this.state;
+    const beersNormalized = beers && beers.filter(beer => beer.id !== id);
+    
+    this.setState({ beers: beersNormalized });
   }
 
   render() {
-    // const cardBeers = beers && beers.map(beer =>
-    //   <BeerCard
-    //     key={beer.id}
-    //     beer={beer}
-    //     onShowModal={onShowModal}
-    //     onSelectFavorite={onSelectFavorite}
-    //   />
-    // );
+    const { beers, page, hasMore, noDataFound } = this.state;
 
     return (
-      // <div className="main-container">
-      //   {/* <InfiniteScroll
-      //     pageStart={1}
-      //     loadMore={loadMore}
-      //     hasMore={hasMore}
-      //     initialLoad={page === 0}
-      //     loader={<div className="loader" key={0}>Loading ...</div>}
-      //   >
-      //     <div className="grid">
-      //       {cardBeers}
-      //     </div>
-      //   </InfiniteScroll> */}
-      // </div>
-      <App />
+      <Main
+        beers={beers}
+        page={page}
+        hasMore={hasMore}
+        noDataFound={noDataFound}
+        onFetchData={this.handleFetchFavorites}
+        onRemoveFavourite={this.handleRemoveFavourite}
+      />
     );
   }
 }

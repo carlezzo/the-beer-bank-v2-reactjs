@@ -6,10 +6,10 @@ const Nav = ({children}) => (
     <nav className="nav">
       <ul className="nav__item">
         <li>
-          <Link className="nav__link" to="/">HOME</Link>
+          <a href='/' className="nav__link" to="/">HOME</a>
         </li>
         <li>
-          <Link params={{ testvalue: "hello" }} className="nav__link" to="/favourites">Favourite</Link>
+          <Link className="nav__link" to="/favourites">Favourite</Link>
         </li>
       </ul>
     </nav>

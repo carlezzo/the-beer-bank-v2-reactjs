@@ -1,8 +1,9 @@
 import React from 'react';
-import BeerCard from '../components/BeerCard';
+import BeerCard from './BeerCard';
 import InfiniteScroll from 'react-infinite-scroller';
+import Loading from './Loading';
 
-const Main = ({ beers, onShowModal, onSelectFavourite, loadMore, page, hasMore }) => {
+const List = ({ beers, onShowModal, onSelectFavourite, loadMore, page, hasMore }) => {
   const cardBeers = beers && beers.map(beer =>
     <BeerCard
       key={beer.id}
@@ -16,10 +17,12 @@ const Main = ({ beers, onShowModal, onSelectFavourite, loadMore, page, hasMore }
     <div className="main-container">
       <InfiniteScroll
         pageStart={1}
-        loadMore={loadMore}
+        loadMore={() => loadMore(false)}
         hasMore={hasMore}
         initialLoad={page === 0}
-        loader={<div className="loader" key={0}>Loading ...</div>}
+        loader={
+          <Loading key={0} /> 
+        }
       >
         <div className="grid">
           {cardBeers}
@@ -29,4 +32,4 @@ const Main = ({ beers, onShowModal, onSelectFavourite, loadMore, page, hasMore }
   );
 }
 
-export default Main;
+export default List;

@@ -2,7 +2,7 @@ export function favouriteManager(id) {
   let favouritesToSave;
 
   const favourites = getFavourites();
-
+  
   if (favourites) {
     if (getFavourite(id)) {
       favouritesToSave = favourites.filter(favourite => favourite !== id);

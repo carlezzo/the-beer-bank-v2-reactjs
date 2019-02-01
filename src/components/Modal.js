@@ -1,10 +1,16 @@
 import React from 'react';
 import BeerCard from './BeerCard';
+import Loading from './Loading';
 
-const Modal = ({ beer, onClose, onOpenSimilar, similarBeers }) => {
-  
-  const similarBeersNormalized = similarBeers && similarBeers.map(beer => 
-    <BeerCard beer={beer} onShowModal={onOpenSimilar} />
+const Modal = ({ beer, onClose, onOpenSimilar, similarBeers, onSelectFavourite, loadingSimilar }) => {
+
+  const similarBeersNormalized = similarBeers && similarBeers.map(beer =>
+    <BeerCard
+      key={beer.id}
+      beer={beer}
+      onShowModal={onOpenSimilar}
+      onSelectFavourite={onSelectFavourite}
+    />
   );
 
   const close = (
@@ -48,7 +54,7 @@ const Modal = ({ beer, onClose, onOpenSimilar, similarBeers }) => {
       <div className="modal__right--list">
         <p>Best served with:</p>
         <ul className="text-information">
-          { beer.food_pairing && beer.food_pairing.map(item => <li> {item} </li>) }
+          {beer.food_pairing && beer.food_pairing.map(item => <li key={item}> {item} </li>)}
         </ul>
       </div>
     </div>
@@ -70,7 +76,11 @@ const Modal = ({ beer, onClose, onOpenSimilar, similarBeers }) => {
           {close}
           {leftSide}
           {rightSide}
-          {similarBeersNormalized && bottom}
+          {loadingSimilar
+            ? <Loading />
+            :
+            similarBeersNormalized && bottom
+          }
         </div>
       </div>
     </>
