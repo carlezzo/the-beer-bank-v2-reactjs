@@ -9,22 +9,22 @@ class Home extends Component {
     const { isLoading, getBeers, currentPage, clear, advancedSearch } = this.props;
     let nextPage = currentPage + 1;
 
+    /* Prevent fetch duplicate data when page is rendering */ 
     if (isLoading) {
       return;
     }
     
+    /* Clear data and back to page 1 when filtering by input text */ 
     if(reload) {
       clear();
       nextPage = 1;
     }
 
-    const filterName = searchQuery ? `&beer_name=${searchQuery}` : '';
-    getBeers(nextPage, `${filterName}`, advancedSearch);
+    getBeers(nextPage, searchQuery, advancedSearch);
   }
 
   render() {
     const { beers, noDataFound, hasMore } = this.props;
-
     return (
       <Main
         beers={beers}

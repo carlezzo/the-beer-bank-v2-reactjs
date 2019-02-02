@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changeAdvanceSearch, clear, clearAdvanceSearch } from '../modules/beer';
+import { changeAdvancedSearch, clear, clearAdvancedSearch } from '../modules/beer';
 
-class AdvanceSearch extends Component {
+class AdvancedSearch extends Component {
   
   handleGoToHome = () => {
     const { history } = this.props;
@@ -11,17 +11,17 @@ class AdvanceSearch extends Component {
   }
 
   handleChange = (e) => {
-    let { changeAdvanceSearch } = this.props;
+    let { changeAdvancedSearch } = this.props;
 
     let field = {};
     field[e.target.name] = e.target.value;
-    changeAdvanceSearch(field);
+    changeAdvancedSearch(field);
   }
 
-  handleClearAdvanceSearch = () => {
-    const { clearAdvanceSearch, clear } = this.props;
-    clearAdvanceSearch();
+  handleClearAdvancedSearch = () => {
+    const { clearAdvancedSearch, clear } = this.props;
     clear();
+    clearAdvancedSearch();
   }
 
   render() {
@@ -31,7 +31,7 @@ class AdvanceSearch extends Component {
       <div className="search">
         
         <div className="search__action--clear">
-          <button className="btn-link" onClick={() => this.handleClearAdvanceSearch()}>
+          <button className="btn-link" onClick={() => this.handleClearAdvancedSearch()}>
             Clear
           </button>
         </div>
@@ -150,12 +150,12 @@ class AdvanceSearch extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeAdvanceSearch: bindActionCreators(changeAdvanceSearch, dispatch),
+  changeAdvancedSearch: bindActionCreators(changeAdvancedSearch, dispatch),
   clear: bindActionCreators(clear, dispatch),
-  clearAdvanceSearch: bindActionCreators(clearAdvanceSearch, dispatch),
+  clearAdvancedSearch: bindActionCreators(clearAdvancedSearch, dispatch),
 });
 
 const mapStateToProps = (state) => ({
   advancedSearch: state.beer.advancedSearch,
 });
-export default connect(mapStateToProps, mapDispatchToProps)(AdvanceSearch)
+export default connect(mapStateToProps, mapDispatchToProps)(AdvancedSearch)

@@ -79,7 +79,7 @@ const Modal = ({ beer, onClose, onOpenSimilar, similarBeers, onSelectFavourite, 
           {loadingSimilar
             ? <Loading />
             :
-            similarBeersNormalized.length && bottom
+            similarBeersNormalized.length ? bottom : <></>
           }
         </div>
       </div>

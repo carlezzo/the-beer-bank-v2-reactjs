@@ -45,6 +45,7 @@ class Main extends Component {
     this.handleFetchData(true);
   }
 
+  /* Wait a time before fetch data when stop typing */
   debouncedOnChange = debounce(() => {
     this.handleFetchData(true);
   }, 900);
@@ -63,7 +64,7 @@ class Main extends Component {
   render() {
     const { infoBeer, searchQuery } = this.state;
     const { beers, hasMore, noDataFound, 
-      isLoadingSimilar, similarBeers, advancedSearch 
+      isLoadingSimilar, similarBeers, advancedSearch
     } = this.props;
     
     const boddy = (

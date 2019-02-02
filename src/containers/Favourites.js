@@ -2,30 +2,30 @@ import React, { Component } from 'react';
 import Main from '../components/Main';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getFavourites, clear, removeFavourite, clearAdvanceSearch } from '../modules/beer';
+import { getFavourites, clear, removeFavourite, clearAdvancedSearch } from '../modules/beer';
 
 class Favourites extends Component {
   componentDidMount() {
-    const { clear, clearAdvanceSearch } = this.props;
+    const { clear, clearAdvancedSearch } = this.props;
     clear();
-    clearAdvanceSearch();
+    clearAdvancedSearch();
   }
 
   handleFetchFavourites = async (searchQuery, reload) => {
     const { isLoading, getFavourites, currentPage, clear } = this.props;
     let nextPage = currentPage + 1;
-
+   
+    /* Prevent fetch duplicate data when page is rendering */ 
     if (isLoading) {
       return;
     }
 
+    /* Clear data and back to page 1 when filtering by input text */ 
     if(reload) {
       clear();
       nextPage = 1;
     }
-
-    const filterName = searchQuery ? `&beer_name=${searchQuery}` : '';
-    getFavourites(nextPage, `${filterName}`);
+    getFavourites(nextPage, searchQuery);
   }
 
   handleRemoveFavourite = (id) => {
@@ -51,7 +51,7 @@ const mapDispatchToProps = dispatch => ({
   getFavourites: bindActionCreators(getFavourites, dispatch),
   removeFavourite: bindActionCreators(removeFavourite, dispatch),
   clear: bindActionCreators(clear, dispatch),
-  clearAdvanceSearch: bindActionCreators(clearAdvanceSearch, dispatch),
+  clearAdvancedSearch: bindActionCreators(clearAdvancedSearch, dispatch),
 });
 
 const mapStateToProps = state => ({

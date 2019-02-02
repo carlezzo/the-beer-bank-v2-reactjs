@@ -29,9 +29,7 @@ const initialState = {
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case LOAD: {
-
       const beersMerged = [...state.data, ...payload.data];
-
       return {
         ...state,
         isLoading: false,
@@ -44,13 +42,11 @@ export default function reducer(state = initialState, { type, payload }) {
     case CLEAR:
       return {
         ...state,
-        ...{
-          data: [],
-          currentPage: 0,
-          hasMore: true,
-          noDataFound: false,
-          isLoading: false,
-        }
+        data: [],
+        currentPage: 0,
+        hasMore: true,
+        noDataFound: false,
+        isLoading: true,
       }
     case CLEAR_ADVANCE_SEARCH:
       return {
@@ -63,37 +59,30 @@ export default function reducer(state = initialState, { type, payload }) {
           ebcLt: '',
           brewedBefore: '',
           brewedAfter: '',
-        }
+        },
+        isLoading: false
       }
     case NO_FAVOURITES_SELECTED:
       return {
         ...state,
-        ...{
-          data: [],
-          currentPage: 0,
-          hasMore: false
-        }
+        data: [],
+        currentPage: 0,
+        hasMore: false
       }
     case ADVANCE_SEARCH: {
       const advancedSearch = { ...state.advancedSearch, ...payload.advancedSearch };
       return {
         ...state,
-        ...{
-          data: [],
-          advancedSearch,
-          hasMore: true,
-
-        }
+        advancedSearch,
+        isLoading: false
       }
     }
     case REMOVE_FAVOURITE: {
       const favourites = state.data.filter(beer => beer.id !== payload.id);
       return {
         ...state,
-        ...{
-          data: favourites,
-          isLoading: false
-        }
+        data: favourites,
+        isLoading: false
       }
     }
     case GET_SIMILAR: {
@@ -102,14 +91,12 @@ export default function reducer(state = initialState, { type, payload }) {
 
       return {
         ...state,
-        ...{
-          similarBeers,
-          isLoadingSimilar: false
-        }
+        similarBeers,
+        isLoadingSimilar: false
       }
     }
     case LOADING:
-      return { ...state, isLoading: payload.loading, currentPage: 0 }
+      return { ...state, currentPage: 0, isLoading: true }
     case LOADING_SIMILAR:
       return { ...state, isLoadingSimilar: true }
     default:
@@ -117,17 +104,16 @@ export default function reducer(state = initialState, { type, payload }) {
   }
 }
 
-export function getBeers(currentPage, queryFilters, advancedSearch) {
+export function getBeers(currentPage, filterName, advancedSearch) {
   return dispatch => {
 
-    dispatch({ type: LOADING, payload: { loading: true } });
+    dispatch({ type: LOADING });
 
     const filterPage = `&page=${currentPage}`
-
+    filterName = filterName ? `&beer_name=${filterName}` : '';
     advancedSearch = normalizeAdvancedSearch(advancedSearch);
-    console.log('-------', advancedSearch);
 
-    return fetch(`https://api.punkapi.com/v2/beers?per_page=${PER_PAGE}${filterPage}${queryFilters}${advancedSearch}`)
+    return fetch(`https://api.punkapi.com/v2/beers?per_page=${PER_PAGE}${filterPage}${filterName}${advancedSearch}`)
       .then(toJson)
       .then(data => {
         dispatch({
@@ -138,9 +124,9 @@ export function getBeers(currentPage, queryFilters, advancedSearch) {
   }
 }
 
-export function getFavourites(currentPage, queryFilters) {
+export function getFavourites(currentPage, filterName) {
   return dispatch => {
-    dispatch({ type: LOADING, payload: { loading: true } });
+    dispatch({ type: LOADING });
 
     const favourites = getLocalFavourites();
     if (!favourites) {
@@ -149,8 +135,9 @@ export function getFavourites(currentPage, queryFilters) {
 
     const filterPage = `&page=${currentPage}`
     const ids = `&ids=${favourites.join().replace(/,/g, '|')}`;
+    filterName = filterName ? `&beer_name=${filterName}` : '';
 
-    return fetch(`https://api.punkapi.com/v2/beers?per_page=${PER_PAGE}${filterPage}${queryFilters}${ids}`)
+    return fetch(`https://api.punkapi.com/v2/beers?per_page=${PER_PAGE}${filterPage}${filterName}${ids}`)
       .then(toJson)
       .then(data => {
         dispatch({
@@ -165,9 +152,9 @@ export function getSimilar(infoBeer) {
   return dispatch => {
     dispatch({ type: LOADING_SIMILAR });
     /*
-       Percentage of similarity 50%
+      Fetch data with 60% percent of similarity
      */
-    const percentage = 0.5;
+    const percentage = 0.6;
 
     const abv_lt = `&abv_lt=${parseInt(infoBeer.abv + (infoBeer.abv * percentage))}`;
     const abv_gt = `&abv_gt=${parseInt(infoBeer.abv - (infoBeer.abv * percentage))}`;
@@ -190,7 +177,10 @@ export function getSimilar(infoBeer) {
 }
 
 function normalizeAdvancedSearch(advancedSearch) {
-
+  /* 
+    Normalize advanced search fields, verifying if there are values 
+    and normalize names for query
+  */
   const ibuGt = advancedSearch['ibuGt'] ? `&ibu_gt=${advancedSearch['ibuGt']}` : '';
   const ibuLt = advancedSearch['ibuLt'] ? `&ibu_lt=${advancedSearch['ibuLt']}` : '';
   const abvGt = advancedSearch['abvGt'] ? `&abv_gt=${advancedSearch['abvGt']}` : '';
@@ -205,12 +195,11 @@ function normalizeAdvancedSearch(advancedSearch) {
 
 export function clear() {
   return dispatch => {
-    dispatch({ type: LOADING, payload: { loading: true } });
     dispatch({ type: CLEAR });
   }
 }
 
-export function clearAdvanceSearch() {
+export function clearAdvancedSearch() {
   return dispatch => {
     dispatch({ type: CLEAR_ADVANCE_SEARCH });
   }
@@ -218,12 +207,12 @@ export function clearAdvanceSearch() {
 
 export function removeFavourite(id) {
   return dispatch => {
-    dispatch({ type: LOADING, payload: { loading: true } });
+    dispatch({ type: LOADING });
     dispatch({ type: REMOVE_FAVOURITE, payload: { id } });
   }
 }
 
-export function changeAdvanceSearch(advancedSearch) {
+export function changeAdvancedSearch(advancedSearch) {
   return dispatch => {
     dispatch({ type: CLEAR });
     dispatch({ type: ADVANCE_SEARCH, payload: { advancedSearch } });

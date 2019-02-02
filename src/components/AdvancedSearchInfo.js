@@ -12,14 +12,21 @@ const labelFilters = {
 };
 
 const AdvancedSearchInfo = ({ filters }) => {
+  /*
+    Map advanced filters to verify the values and get de labels
+  */
+
   let filtersNormalized = Object.keys(filters).map(filter => {
     if (filters[filter]) { 
       return (
-        <div>
+        <div key={filter}>
           <span> {labelFilters[filter]}: </span> <span> {filters[filter]} </span>
         </div>
       );
+    } else {
+      return null;
     }
+    
   }).filter(x => x);
 
   if (!filtersNormalized.length) {
