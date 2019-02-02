@@ -61,6 +61,12 @@ class Main extends Component {
     onFetchData(searchQuery, reload);
   }
 
+  handleClearSearch = () => {
+    const { onFetchData } = this.props;
+    this.setState({ searchQuery: '' });
+    onFetchData(null, true);
+  }
+
   render() {
     const { infoBeer, searchQuery } = this.state;
     const { beers, hasMore, noDataFound, 
@@ -96,6 +102,7 @@ class Main extends Component {
         <Header
           searchQuery={searchQuery}
           onChange={this.handleChangeSearch}
+          onClear={this.handleClearSearch}
         />
 
         <AdvancedSearchInfo filters={advancedSearch} />
