@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { getBeers, clear } from '../modules/beer';
 
 class Home extends Component {
-
   handleFetchData = async (searchQuery, reload) => {
     const { isLoading, getBeers, currentPage, clear, advancedSearch } = this.props;
     let nextPage = currentPage + 1;

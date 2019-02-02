@@ -5,6 +5,7 @@
 @import 'Modal';
 @import 'Nav';
 @import 'AdvanceSearch';
+@import 'AdvancedSearchInfo';
 @import '~font-awesome/css/font-awesome.min.css';
 
 :root {
@@ -42,20 +43,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-.u-center {
-  width: 100%;
-  text-align: center;
-}
-
-.loading {
-  font-size: 3rem;
-}
-
-.u-center-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
 }

@@ -8,6 +8,7 @@ import NoDataFound from './NoDataFound';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getSimilar } from '../modules/beer';
+import AdvancedSearchInfo from './AdvancedSearchInfo';
 
 class Main extends Component {
 
@@ -61,8 +62,10 @@ class Main extends Component {
 
   render() {
     const { infoBeer, searchQuery } = this.state;
-    const { beers, hasMore, noDataFound, isLoadingSimilar, similarBeers } = this.props;
-  
+    const { beers, hasMore, noDataFound, 
+      isLoadingSimilar, similarBeers, advancedSearch 
+    } = this.props;
+    
     const boddy = (
       <List
         beers={beers}
@@ -94,6 +97,8 @@ class Main extends Component {
           onChange={this.handleChangeSearch}
         />
 
+        <AdvancedSearchInfo filters={advancedSearch} />
+
         {
           noDataFound
             ? <NoDataFound />
@@ -113,5 +118,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   similarBeers: state.beer.similarBeers,
   isLoadingSimilar: state.beer.isLoadingSimilar,
+  advancedSearch: state.beer.advancedSearch,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

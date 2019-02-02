@@ -17,7 +17,6 @@ const List = ({ beers, onShowModal, onSelectFavourite, loadMore, hasMore }) => {
   return (
     <div className="main-container">
       <InfiniteScroll
-        pageStart={1}
         loadMore={() => loadMore(false)}
         hasMore={hasMore}
         loader={

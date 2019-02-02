@@ -9,7 +9,7 @@ const Header = ({onChange, searchQuery}) => (
     <div className="header__input">
       <input 
         defaultValue={searchQuery}
-        className="input-search" 
+        className="input" 
         placeholder="Search for beer name" 
         onChange={(e) => onChange(e)}
       />

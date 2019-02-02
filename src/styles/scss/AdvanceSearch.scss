@@ -5,6 +5,7 @@
   margin-top: 10rem;
   box-shadow: 0 .2rem 2rem rgba(#000, .15);
   border-radius: 3px;
+  position: relative;
 
   @media only screen and (max-width: 37.5em){ // 600px
     width: 90%;
@@ -21,6 +22,15 @@
     @media only screen and (max-width: 37.5em) { // 600px
       grid-template-columns: 1fr;
     }
+  }
+
+  &__action--clear {
+    position: absolute;
+    top: .5rem;
+    right: 0;
+
+    width: 4rem;
+    height: 3rem;
   }
 
   &__action {

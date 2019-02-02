@@ -1,0 +1,41 @@
+.filters-container {
+  max-width: 850px;
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: -4rem;
+  text-align: center;
+
+  @media only screen and (max-width: 60em){
+    max-width: 500px;
+    margin-bottom: 0;
+  }
+    
+  @media only screen and (max-width: 37.5em){
+    max-width: 100%;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+}
+
+.grid-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 17rem));
+  grid-gap: .5rem;
+  justify-content: center;
+  text-align: left;
+
+  & > * {
+    font-size: 1.3rem;
+    color: var(--color-grey);
+    margin-right: 10px;
+
+    span:nth-child(1) {
+      font-weight: bold;
+    }
+  }
+}

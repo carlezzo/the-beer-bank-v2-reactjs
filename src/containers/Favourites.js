@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import Main from '../components/Main';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getFavourites, clear, removeFavourite } from '../modules/beer';
+import { getFavourites, clear, removeFavourite, clearAdvanceSearch } from '../modules/beer';
 
 class Favourites extends Component {
   componentDidMount() {
-    this.handleFetchFavourites(null, true);
+    const { clear, clearAdvanceSearch } = this.props;
+    clear();
+    clearAdvanceSearch();
   }
 
   handleFetchFavourites = async (searchQuery, reload) => {
@@ -33,7 +35,6 @@ class Favourites extends Component {
 
   render() {
     const { beers, noDataFound, hasMore } = this.props;
-
     return (
       <Main
         beers={beers}
@@ -50,6 +51,7 @@ const mapDispatchToProps = dispatch => ({
   getFavourites: bindActionCreators(getFavourites, dispatch),
   removeFavourite: bindActionCreators(removeFavourite, dispatch),
   clear: bindActionCreators(clear, dispatch),
+  clearAdvanceSearch: bindActionCreators(clearAdvanceSearch, dispatch),
 });
 
 const mapStateToProps = state => ({

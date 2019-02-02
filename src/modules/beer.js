@@ -1,24 +1,29 @@
 import { getFavourites as getLocalFavourites } from '../utils/utils';
 
-const LOAD = 'beer/LOAD';
-const ADVACE_SEARCH = 'beer/ADVACE_SEARCH';
-const CLEAR = 'beer/CLEAR';
-const LOADING = 'beer/LOADING';
-const LOADING_SIMILAR = 'beer/LOADING_SIMILAR';
-const NO_FAVOURITES_SELECTED = 'beer/NO_FAVOURITES_SELECTED';
-const REMOVE_FAVOURITE = 'beer/REMOVE_FAVOURITE';
-const GET_SIMILAR = 'beer/GET_SIMILAR';
+/* 
+  Change PER_PAGE value for load more items per page
+*/
 const PER_PAGE = 20;
 
+const LOAD = 'beer/LOAD';
+const CLEAR = 'beer/CLEAR';
+const LOADING = 'beer/LOADING';
+const GET_SIMILAR = 'beer/GET_SIMILAR';
+const ADVANCE_SEARCH = 'beer/ADVANCE_SEARCH';
+const LOADING_SIMILAR = 'beer/LOADING_SIMILAR';
+const REMOVE_FAVOURITE = 'beer/REMOVE_FAVOURITE';
+const CLEAR_ADVANCE_SEARCH = 'beer/CLEAR_ADVANCE_SEARCH';
+const NO_FAVOURITES_SELECTED = 'beer/NO_FAVOURITES_SELECTED';
+
 const initialState = {
-  currentPage: 0,
   data: [],
+  hasMore: true,
+  currentPage: 0,
   similarBeers: [],
-  advancedSearch: {},
   isLoading: false,
-  isLoadingSimilar: false,
+  advancedSearch: {},
   noDataFound: false,
-  hasMore: true
+  isLoadingSimilar: false,
 };
 
 export default function reducer(state = initialState, { type, payload }) {
@@ -44,6 +49,20 @@ export default function reducer(state = initialState, { type, payload }) {
           currentPage: 0,
           hasMore: true,
           noDataFound: false,
+          isLoading: false,
+        }
+      }
+    case CLEAR_ADVANCE_SEARCH:
+      return {
+        ...state, advancedSearch: {
+          ibuGt: '',
+          ibuLt: '',
+          abvGt: '',
+          abvLt: '',
+          ebcGt: '',
+          ebcLt: '',
+          brewedBefore: '',
+          brewedAfter: '',
         }
       }
     case NO_FAVOURITES_SELECTED:
@@ -55,13 +74,15 @@ export default function reducer(state = initialState, { type, payload }) {
           hasMore: false
         }
       }
-    case ADVACE_SEARCH: {
+    case ADVANCE_SEARCH: {
       const advancedSearch = { ...state.advancedSearch, ...payload.advancedSearch };
       return {
         ...state,
         ...{
           data: [],
-          advancedSearch
+          advancedSearch,
+          hasMore: true,
+
         }
       }
     }
@@ -104,7 +125,7 @@ export function getBeers(currentPage, queryFilters, advancedSearch) {
     const filterPage = `&page=${currentPage}`
 
     advancedSearch = normalizeAdvancedSearch(advancedSearch);
-    console.log(advancedSearch);
+    console.log('-------', advancedSearch);
 
     return fetch(`https://api.punkapi.com/v2/beers?per_page=${PER_PAGE}${filterPage}${queryFilters}${advancedSearch}`)
       .then(toJson)
@@ -146,7 +167,6 @@ export function getSimilar(infoBeer) {
     /*
        Percentage of similarity 50%
      */
-    // this.setState({ loadingSimilar: true });
     const percentage = 0.5;
 
     const abv_lt = `&abv_lt=${parseInt(infoBeer.abv + (infoBeer.abv * percentage))}`;
@@ -157,9 +177,6 @@ export function getSimilar(infoBeer) {
 
     const ebc_lt = `&ebc_lt=${parseInt(infoBeer.ebc + (infoBeer.ebc * percentage))}`;
     const ebc_gt = `&ebc_gt=${parseInt(infoBeer.ebc - (infoBeer.ebc * percentage))}`;
-
-    //  const data = await response.json();
-    //  const dataFiltered = data && data.filter(beer => beer.id !== infoBeer.id);
 
     return fetch(`https://api.punkapi.com/v2/beers?per_page=4${abv_lt}${abv_gt}${ibu_lt}${ibu_gt}${ebc_lt}${ebc_gt}`)
       .then(toJson)
@@ -187,14 +204,20 @@ function normalizeAdvancedSearch(advancedSearch) {
 }
 
 export function clear() {
-  return async dispatch => {
+  return dispatch => {
     dispatch({ type: LOADING, payload: { loading: true } });
     dispatch({ type: CLEAR });
   }
 }
 
+export function clearAdvanceSearch() {
+  return dispatch => {
+    dispatch({ type: CLEAR_ADVANCE_SEARCH });
+  }
+}
+
 export function removeFavourite(id) {
-  return async dispatch => {
+  return dispatch => {
     dispatch({ type: LOADING, payload: { loading: true } });
     dispatch({ type: REMOVE_FAVOURITE, payload: { id } });
   }
@@ -202,7 +225,8 @@ export function removeFavourite(id) {
 
 export function changeAdvanceSearch(advancedSearch) {
   return dispatch => {
-    dispatch({ type: ADVACE_SEARCH, payload: { advancedSearch } });
+    dispatch({ type: CLEAR });
+    dispatch({ type: ADVANCE_SEARCH, payload: { advancedSearch } });
   }
 }
 

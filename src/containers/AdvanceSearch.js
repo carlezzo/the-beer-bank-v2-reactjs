@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changeAdvanceSearch } from '../modules/beer';
+import { changeAdvanceSearch, clear, clearAdvanceSearch } from '../modules/beer';
 
 class AdvanceSearch extends Component {
   
@@ -12,9 +12,16 @@ class AdvanceSearch extends Component {
 
   handleChange = (e) => {
     let { changeAdvanceSearch } = this.props;
+
     let field = {};
     field[e.target.name] = e.target.value;
     changeAdvanceSearch(field);
+  }
+
+  handleClearAdvanceSearch = () => {
+    const { clearAdvanceSearch, clear } = this.props;
+    clearAdvanceSearch();
+    clear();
   }
 
   render() {
@@ -22,26 +29,33 @@ class AdvanceSearch extends Component {
 
     return (
       <div className="search">
+        
+        <div className="search__action--clear">
+          <button className="btn-link" onClick={() => this.handleClearAdvanceSearch()}>
+            Clear
+          </button>
+        </div>
+        
         <div className="search__fields">
           <div>
-            <label className="input-label" htmlFor="ibuGt">Max IBU</label>
+            <label className="input-label" htmlFor="ibuGt">Min IBU</label>
             <input
               id="ibuGt"
               name="ibuGt"
-              defaultValue={advancedSearch.ibuGt}
-              className="input-search"
+              value={advancedSearch.ibuGt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
             />
           </div>
           <div>
-            <label className="input-label" htmlFor="ibuLt">Min IBU</label>
+            <label className="input-label" htmlFor="ibuLt">Max IBU</label>
             <input
               id="ibuLt"
               name="ibuLt"
-              defaultValue={advancedSearch.ibuLt}
-              className="input-search"
+              value={advancedSearch.ibuLt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
@@ -49,24 +63,24 @@ class AdvanceSearch extends Component {
           </div>
 
           <div>
-            <label className="input-label" htmlFor="abvGt">Max ABV</label>
+            <label className="input-label" htmlFor="abvGt">Min ABV</label>
             <input
               id="abvGt"
               name="abvGt"
-              defaultValue={advancedSearch.abvGt}
-              className="input-search"
+              value={advancedSearch.abvGt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
             />
           </div>
           <div>
-            <label className="input-label" htmlFor="abvLt">Min ABV</label>
+            <label className="input-label" htmlFor="abvLt">Max ABV</label>
             <input
               id="abvLt"
               name="abvLt"
-              defaultValue={advancedSearch.abvLt}
-              className="input-search"
+              value={advancedSearch.abvLt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
@@ -74,24 +88,24 @@ class AdvanceSearch extends Component {
           </div>
 
           <div>
-            <label className="input-label" htmlFor="ebcGt">Max EBC</label>
+            <label className="input-label" htmlFor="ebcGt">Min EBC</label>
             <input
               id="ebcGt"
               name="ebcGt"
-              defaultValue={advancedSearch.ebcGt}
-              className="input-search"
+              value={advancedSearch.ebcGt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
             />
           </div>
           <div>
-            <label className="input-label" htmlFor="ebcLt">Min EBC</label>
+            <label className="input-label" htmlFor="ebcLt">Max EBC</label>
             <input
               id="ebcLt"
               name="ebcLt"
-              defaultValue={advancedSearch.ebcLt}
-              className="input-search"
+              value={advancedSearch.ebcLt}
+              className="input input--filter"
               placeholder="0.0"
               onChange={(e) => this.handleChange(e)}
               type="number"
@@ -103,9 +117,9 @@ class AdvanceSearch extends Component {
             <input
               id="brewedBefore"
               name="brewedBefore"
-              defaultValue={advancedSearch.brewedBefore}
-              className="input-search"
-              placeholder="0.0"
+              value={advancedSearch.brewedBefore}
+              className="input input--filter"
+              placeholder="12-2019"
               onChange={(e) => this.handleChange(e)}
             />
           </div>
@@ -114,9 +128,9 @@ class AdvanceSearch extends Component {
             <input
               id="brewedAfter"
               name="brewedAfter"
-              defaultValue={advancedSearch.brewedAfter}
-              className="input-search"
-              placeholder="0.0"
+              value={advancedSearch.brewedAfter}
+              className="input input--filter"
+              placeholder="01-2011"
               onChange={(e) => this.handleChange(e)}
             />
           </div>
@@ -127,7 +141,8 @@ class AdvanceSearch extends Component {
           <button 
             className="btn btn--primary"
             onClick={() => this.handleGoToHome()} 
-          > Search </button>
+          > Search 
+          </button>
         </div>
       </div>
     );
@@ -136,6 +151,8 @@ class AdvanceSearch extends Component {
 
 const mapDispatchToProps = dispatch => ({
   changeAdvanceSearch: bindActionCreators(changeAdvanceSearch, dispatch),
+  clear: bindActionCreators(clear, dispatch),
+  clearAdvanceSearch: bindActionCreators(clearAdvanceSearch, dispatch),
 });
 
 const mapStateToProps = (state) => ({

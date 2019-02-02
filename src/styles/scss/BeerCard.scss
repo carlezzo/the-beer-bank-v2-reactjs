@@ -44,7 +44,7 @@
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 0 3rem .1rem rgba(#000, .25);
+    box-shadow: 0 0 2rem .1rem rgba(#000, .10);
   }
 }
 
@@ -62,8 +62,8 @@
     font-size: 1.6rem;
   }
 
-  &:hover {
-    transform: translateY(-1px);
+  &:active {
+    transform: translateY(1px);
   }
 
   &__ok {
