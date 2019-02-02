@@ -4,13 +4,13 @@ import { getFavourite } from '../utils/utils';
 const BeerCard = ({ beer, onShowModal, onSelectFavourite }) => {
   
   const favouriteIcon = (
-    <a className="favourite" onClick={() => onSelectFavourite(beer.id)}>
+    <button className="favourite btn-link" onClick={() => onSelectFavourite(beer.id)}>
       {
         getFavourite(beer.id)
         ? <i className="fa fa-star favourite__ok"></i>
         : <i className="fa fa-star-o"></i>
       }
-    </a>
+    </button>
   );
 
   return (
@@ -18,7 +18,7 @@ const BeerCard = ({ beer, onShowModal, onSelectFavourite }) => {
       <div className="card">
         {favouriteIcon}
         <div className="card__content" onClick={() => onShowModal(beer)}>
-          <img className="card__img" src={beer.image_url} />
+          <img className="card__img" src={beer.image_url} alt="beer"/>
           <p className="card__name">{beer.name}</p>
           <p className="card__tagline">{beer.tagline}</p>
         </div>

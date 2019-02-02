@@ -14,14 +14,14 @@ const Modal = ({ beer, onClose, onOpenSimilar, similarBeers, onSelectFavourite, 
   );
 
   const close = (
-    <a className="modal__close" onClick={() => onClose()}>
+    <button className="btn-link modal__close" onClick={() => onClose()}>
       <i className="fa fa-times"></i>
-    </a>
+    </button>
   );
 
   const leftSide = (
     <div className="modal__left">
-      <img className="modal__img--left" src={beer.image_url} />
+      <img className="modal__img--left" src={beer.image_url} alt="beer"/>
     </div>
   );
 

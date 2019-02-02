@@ -1,0 +1,30 @@
+.search {
+  width: 60rem;
+  padding: 3rem;
+  margin: 0 auto;
+  margin-top: 10rem;
+  box-shadow: 0 .2rem 2rem rgba(#000, .15);
+  border-radius: 3px;
+
+  @media only screen and (max-width: 37.5em){ // 600px
+    width: 90%;
+    margin-top: 5rem;
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: 20rem 20rem;
+    grid-gap: 2rem;
+    justify-content: center;
+    margin-bottom: 1.6rem;
+
+    @media only screen and (max-width: 37.5em) { // 600px
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__action {
+    width: 40%;
+    margin: 0 auto;
+  }
+}

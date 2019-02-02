@@ -1,85 +1,62 @@
 import React, { Component } from 'react';
-import { getFavourites } from '../utils/utils';
 import Main from '../components/Main';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getFavourites, clear, removeFavourite } from '../modules/beer';
 
-export default class Favourites extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.perPage = 20;
-
-    this.state = {
-      beers: [],
-      page: 0,
-      loading: false,
-      hasMore: true,
-      noDataFound: false
-    }
-  }
-
+class Favourites extends Component {
   componentDidMount() {
-    this.handleFetchFavorites();
+    this.handleFetchFavourites(null, true);
   }
 
-  handleFetchFavorites = async (searchQuery, reload) => {
-    const { beers, loading, hasMore, page } = this.state;
+  handleFetchFavourites = async (searchQuery, reload) => {
+    const { isLoading, getFavourites, currentPage, clear } = this.props;
+    let nextPage = currentPage + 1;
 
-    if (reload) {
-      this.setState({page: 0, beers: [], hasMore: true});
-    }
-
-    if (loading || !hasMore) {
+    if (isLoading) {
       return;
     }
 
-    const favourites = getFavourites();
-
-    if (!favourites) {
-      this.setState({ hasMore: false })
-      return;
+    if(reload) {
+      clear();
+      nextPage = 1;
     }
 
-    this.setState({ loading: true })
-
-    const nextPage = page + 1;
-    const filterPage = `&page=${nextPage}`
-    const ids = `&ids=${favourites.join().replace(/,/g, '|')}`;
     const filterName = searchQuery ? `&beer_name=${searchQuery}` : '';
-    const perPage = `per_page=${20}`;
-
-    const response = await fetch(`https://api.punkapi.com/v2/beers?${perPage}${filterPage}${ids}${filterName}`)
-    const data = await response.json();
-
-    const favouritesMerged = [...beers, ...data];
-
-    this.setState({ 
-      beers: favouritesMerged, 
-      loading: false,
-      page: nextPage,
-      hasMore: data.length === this.perPage,
-      noDataFound: !data.length && !favouritesMerged.length
-    });
+    getFavourites(nextPage, `${filterName}`);
   }
 
   handleRemoveFavourite = (id) => {
-    const { beers } = this.state;
-    const beersNormalized = beers && beers.filter(beer => beer.id !== id);
-    
-    this.setState({ beers: beersNormalized });
+    const { removeFavourite } = this.props;
+    removeFavourite(id);
   }
 
   render() {
-    const { beers, page, hasMore, noDataFound } = this.state;
+    const { beers, noDataFound, hasMore } = this.props;
 
     return (
       <Main
         beers={beers}
-        page={page}
         hasMore={hasMore}
         noDataFound={noDataFound}
-        onFetchData={this.handleFetchFavorites}
+        onFetchData={this.handleFetchFavourites}
         onRemoveFavourite={this.handleRemoveFavourite}
       />
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  getFavourites: bindActionCreators(getFavourites, dispatch),
+  removeFavourite: bindActionCreators(removeFavourite, dispatch),
+  clear: bindActionCreators(clear, dispatch),
+});
+
+const mapStateToProps = state => ({
+  beers: state.beer.data,
+  isLoading: state.beer.isLoading,
+  noDataFound: state.beer.noDataFound,
+  currentPage: state.beer.currentPage,
+  hasMore: state.beer.hasMore,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Favourites)

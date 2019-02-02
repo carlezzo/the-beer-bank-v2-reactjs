@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 const Header = ({onChange, searchQuery}) => (
   <header className="header">
@@ -13,6 +14,11 @@ const Header = ({onChange, searchQuery}) => (
         onChange={(e) => onChange(e)}
       />
     </div>
+
+    <Link className="header__link" to="/search">
+      <i className="fa fa-search"></i>
+      <span> Advanced Search </span>
+    </Link>
   </header>
 );
 

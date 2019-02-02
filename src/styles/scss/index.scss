@@ -4,6 +4,7 @@
 @import 'BeerCard';
 @import 'Modal';
 @import 'Nav';
+@import 'AdvanceSearch';
 @import '~font-awesome/css/font-awesome.min.css';
 
 :root {
@@ -24,7 +25,7 @@
 html {
   font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
 
-  @media (max-width: 600px){
+  @media only screen and (max-width: 37.5em){ // 600px
     font-size: 50%; //1 rem = 8px, 8/16 = 50%
   }
 }

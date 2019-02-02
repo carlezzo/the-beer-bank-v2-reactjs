@@ -17,7 +17,7 @@
 
   &__img {
     width: 5rem;
-    height: 10rem;
+    height: 11rem;
     margin-bottom: 1rem;
   }
 
@@ -26,12 +26,20 @@
     color: var(--color-primary);
     font-weight: bold;
     margin-bottom: .5rem;
+
+    @media only screen and (max-width: 37.5em){ // 600px
+      font-size: 2rem;
+    }
   }
 
   &__tagline {
     font-size: 1.1rem;
-    color: #C6BCB6;
+    color: var(--color-grey-light);
     font-weight: 500;
+
+    @media only screen and (max-width: 37.5em){ // 600px
+      font-size: 1.5rem;
+    }
   }
 
   &:hover {
@@ -43,10 +51,16 @@
 .favourite {
   font-size: 1.3rem;
   position: absolute;
-  top: .8rem;
-  right: 1.1rem;
+  top: -.2rem;
+  right: .2rem;
   cursor: pointer;
   transition: all .2s;
+  width: 4rem;
+  height: 4rem;
+
+  @media only screen and (max-width: 37.5em){ // 600px
+    font-size: 1.6rem;
+  }
 
   &:hover {
     transform: translateY(-1px);
